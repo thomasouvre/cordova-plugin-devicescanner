@@ -1,0 +1,30 @@
+{
+  "version": "1.0.0",
+  "name": "cordova-plugin-devicescanner",
+  "author": {
+    "name": "InWink (Infinite Square)"
+  },
+  "bugs": {
+    "url": "https://infinitesquare.visualstudio.com/InfiniteSquare_InWink"
+  },
+  "cordova": {
+    "platforms": [
+      "android"
+    ]
+  },
+  "dependencies": {},
+  "description": "Cordova Device Scanner SDK",
+  "devDependencies": {},
+  "directories": {},
+  "keywords": [
+    "cordova",
+    "device",
+    "scanner",
+    "cordova-android"
+  ],
+  "optionalDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/apache/cordova-plugin-whitelist.git"
+  }
+}

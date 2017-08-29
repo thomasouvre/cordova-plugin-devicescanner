@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+           id="cordova-plugin-devicescanner"
+      version="1.0.0">
+    <name>devicescanner</name>
+    <description>Cordova Device Scanner Plugin</description>
+    <license>Apache 2.0</license>
+    <keywords>cordova,device,scanner</keywords>
+
+    <engines>
+      <engine name="cordova-android" version=">=4.0.0" />
+    </engines>
+
+    <js-module src="www/devicescanner.js" name="DeviceScanner">
+        <clobbers target="cordova.plugins.deviceScanner"/>
+    </js-module>
+
+    <platform name="android">
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="DeviceScanner">
+                <param name="android-package" value="com.inwink.devicescansdk.DeviceScanner"/>
+                <param name="onload" value="true" />
+            </feature>
+        </config-file>
+        <config-file target="AndroidManifest.xml" parent="/manifest">
+            <permission
+                android:name="device.sdk.sample.scanner.permission.SCANNER_RESULT_RECEIVER"
+                android:protectionLevel="normal" />
+
+            <uses-permission android:name="device.sdk.sample.scanner.permission.SCANNER_RESULT_RECEIVER" />
+            <uses-permission android:name="android.permission.BROADCAST_STICKY" />
+        </config-file>
+        <config-file target="AndroidManifest.xml" parent="/manifest/application">
+            <receiver
+                android:name="com.inwink.devicescansdk.DeviceScanner$ScanResultReceiver"
+                android:enabled="true"
+                android:permission="device.sdk.sample.scanner.permission.SCANNER_RESULT_RECEIVER"
+                android:priority="0" >
+                <intent-filter>
+                    <action android:name="device.common.USERMSG" />
+                </intent-filter>
+            </receiver>
+        </config-file>
+        <source-file src="src/android/libs/device.sdk.jar" target-dir="libs" />
+        <source-file src="src/android/DeviceScanner.java" target-dir="src/com/inwink/devicescansdk/devicescanner" />
+    </platform>
+
+</plugin>
