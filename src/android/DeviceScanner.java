@@ -28,7 +28,6 @@ public class DeviceScanner extends CordovaPlugin {
 	private static ScanManager mScanner;
 	private static DecodeResult mDecodeResult;
 	private static CallbackContext mCallbackContext;
-	private static CallbackContext mInfosCallbackContext;
 
 	public static final int CODE_SCANNER_NOT_FOUND = 1;
 
@@ -38,10 +37,10 @@ public class DeviceScanner extends CordovaPlugin {
 			if (mScanner != null) {
 				mScanner.aDecodeGetResult(mDecodeResult.recycle());
 				if (mCallbackContext != null) {
-					mCallbackContext.success(mDecodeResult.toString());
+					PluginResult result = new PluginResult(PluginResult.Status.OK, mDecodeResult.toString());
+					result.setKeepCallback(true);
+					mCallbackContext.sendPluginResult(result);
 				}
-				// mBarType.setText(mDecodeResult.symName);
-				// mResult.setText(mDecodeResult.toString());
 			}
 		}
 	}
@@ -60,32 +59,6 @@ public class DeviceScanner extends CordovaPlugin {
 			disabled = true;
 			return;
 		}
-
-		final DecodeStateCallback callback = new DecodeStateCallback() {
-			@Override
-			public void setHandler(Handler handler) {
-				super.setHandler(handler);
-			}
-		};
-		callback.setHandler(new Handler() {
-			@Override
-			public void handleMessage(Message msg) {
-				super.handleMessage(msg);
-				try {
-					if (mInfosCallbackContext != null) {
-						getInfos(null, mInfosCallbackContext);
-					}
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-				/*finally {
-					mInfosCallbackContext = null;
-					mScanner.aUnregisterDecodeStateCallback(callback);
-				}*/
-			}
-		});
-		boolean success = mScanner.aRegisterDecodeStateCallback(callback);
-		LOG.v(TAG, success ? "DeviceScanner: aRegisterDecodeStateCallback success" :  "DeviceScanner: aRegisterDecodeStateCallback fail");
     }
 
     @Override
@@ -122,11 +95,6 @@ public class DeviceScanner extends CordovaPlugin {
 			if (ok) setInfos(args, callbackContext);
 		}
 
-		if (action.equals("listenState")) {
-			methodFound = true;
-			if (ok) listenState(args, callbackContext);
-		}
-
 		return methodFound;
     }
 
@@ -134,13 +102,8 @@ public class DeviceScanner extends CordovaPlugin {
 		mCallbackContext = callbackContext;
 	}
 
-	public void listenState(JSONArray args, CallbackContext callbackContext)throws JSONException {
-		mInfosCallbackContext = callbackContext;
-	}
-
 	public void clear(JSONArray args, CallbackContext callbackContext) throws JSONException {
 		mCallbackContext = null;
-		mInfosCallbackContext = null;
 	}
 
 	public void getInfos(JSONArray args, CallbackContext callbackContext) throws JSONException {
